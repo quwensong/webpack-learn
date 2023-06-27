@@ -23,7 +23,10 @@ console.log(__dirname);
 
 module.exports = {
   mode: "development",
-  entry: resolve(__dirname, "./src/index.js"),
+  entry: {
+    index: resolve(__dirname, "./src/index.js"),
+    // main: resolve(__dirname, "./src/main.js"),
+  },
   output: {
     filename: "[name].[chunkhash:10].js",
     path: resolve(__dirname, "dist"),
@@ -40,12 +43,27 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.less$/, // 针对.less结尾的文件设置LOADER
+        use:['style-loader', 'css-loader', 'less-loader']
+      }
     ],
   },
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: resolve(__dirname, "./public/index.html"),
+      filename: "index.html", // 打包后的文件名
+      chunks: ["index"], // 与入口文件对应的模块名
     }),
+    // new HtmlWebpackPlugin({
+    //   template: resolve(__dirname, "./public/main.html"),
+    //   filename: "main.html",
+    //   chunks: ["main"], // 与入口文件对应的模块名
+    // }),
   ],
 };
