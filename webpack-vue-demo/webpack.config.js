@@ -3,11 +3,15 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const vueLoaderPlugin = require("vue-loader/lib/plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const Webpack = require("webpack");
 // 多线程打包
 const HappyPack = require("happypack");
 const os = require("os");
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
+
+// 优化压缩代码时间
+const ParallelUglifyPlugin = require("webpack-parallel-uglify-plugin");
 
 const devMode = process.argv.indexOf("--mode=production") === -1;
 
@@ -165,5 +169,39 @@ module.exports = {
       ],
       threadPool: happyThreadPool, //共享进程池
     }),
+    new Webpack.DllReferencePlugin({
+      context: __dirname,
+      manifest: require("./vendor-manifest.json"),
+    }),
+    new CopyWebpackPlugin([
+      // 拷贝生成的文件从public到dist/目录 这样每次不必手动去cv
+      {
+        from: resolve(__dirname, "./public/static"),
+        to: resolve(__dirname, "./dist/static"),
+      },
+    ]),
   ],
+  optimization: {
+    minimizer: [
+      // new UglifyJsPlugin({ //压缩js
+      //   cache: true, // 开启缓存
+      //   parallel: true, // 开启多线程
+      //   sourceMap: true, // set to true if you want JS source maps
+      // })
+      new ParallelUglifyPlugin({
+        cacheDir: ".cache/",
+        uglifyJS: {
+          output: {
+            comments: false,
+            beautify: false,
+          },
+          compress: {
+            drop_console: true,
+            collapse_vars: true,
+            reduce_vars: true,
+          },
+        },
+      }),
+    ],
+  },
 };
