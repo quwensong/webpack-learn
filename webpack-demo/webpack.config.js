@@ -25,7 +25,7 @@ console.log(__dirname);
 module.exports = {
   mode: "development",
   entry: {
-    index: resolve(__dirname, "./src/index.js"),
+    index: ["@babel/polyfill", resolve(__dirname, "./src/index.js")],
     // main: resolve(__dirname, "./src/main.js"),
   },
   output: {
@@ -42,7 +42,14 @@ module.exports = {
             loader: resolve(__dirname, "loader", "doc.js"),
             options: {},
           },
+          {
+            loader: "babel-loader",
+            options: {
+              presets: ["@babel/preset-env"],
+            },
+          },
         ],
+        exclude: /node_modules/,
       },
       {
         test: /\.(jpe?g|png|gif)$/i, //图片文件
@@ -117,6 +124,12 @@ module.exports = {
         ],
       },
     ],
+  },
+  resolve: {
+    alias: {
+      "@": resolve(__dirname, "./src"),
+    },
+    extensions: ["*", ".js", ".json", ".vue"],
   },
   plugins: [
     new CleanWebpackPlugin(),
