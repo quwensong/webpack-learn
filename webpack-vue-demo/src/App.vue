@@ -5,6 +5,9 @@
 <script>
 export default {
   name: "App",
+  mounted() {
+    console.log("app mounted");
+  },
 };
 </script>
 

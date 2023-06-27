@@ -4,6 +4,9 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const vueLoaderPlugin = require("vue-loader/lib/plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const firstPlugin = require("./plugins/webpack-firstPlugin.js");
+const EmitPlugin = require("./plugins/EmitPlugin.js");
+
 const Webpack = require("webpack");
 // 多线程打包
 const HappyPack = require("happypack");
@@ -40,6 +43,9 @@ module.exports = {
       {
         test: /\.vue$/i,
         use: [
+          // {
+          //   loader: resolve(__dirname, "./loaders/del-console.js"),
+          // },
           {
             loader: "vue-loader",
             options: {
@@ -56,10 +62,21 @@ module.exports = {
         test: /\.js$/,
         use: [
           {
+            loader: resolve(__dirname, "./loaders/del-console.js"),
+          },
+          {
             loader: "babel-loader",
             options: {
               // 支持vue中的jsx语法 "@vue/babel-preset-jsx"
-              presets: ["@babel/preset-env", "@vue/babel-preset-jsx"],
+              presets: [
+                [
+                  "@babel/preset-env",
+                  {
+                    modules: false,
+                  },
+                ],
+                "@vue/babel-preset-jsx",
+              ],
             },
           },
           {
@@ -162,7 +179,7 @@ module.exports = {
         {
           loader: "babel-loader",
           options: {
-            presets: [["@babel/preset-env"], { modules: false }],
+            presets: [["@babel/preset-env"]],
             cacheDirectory: true,
           },
         },
@@ -180,6 +197,8 @@ module.exports = {
         to: resolve(__dirname, "./dist/static"),
       },
     ]),
+    new firstPlugin(),
+    new EmitPlugin(),
   ],
   optimization: {
     minimizer: [
