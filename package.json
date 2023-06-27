@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build:demo": "webpack --config webpack-demo/webpack.config.js",
-    "build:vue-demo": "webpack --config webpack-vue-demo/webpack.config.js",
-    "dev:vue-demo": "webpack-dev-server --config webpack-vue-demo/webpack.config.js --open"
+    "build-dev:vue-demo": "webpack --mode=development --config webpack-vue-demo/webpack.dev.js",
+    "build-prd:vue-demo": "webpack --mode=production --config webpack-vue-demo/webpack.prod.js",
+    "dev:vue-demo": "webpack-dev-server --config webpack-vue-demo/webpack.dev.js --open"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +19,7 @@
     "autoprefixer": "^7.2.4",
     "babel-loader": "^8.2.0",
     "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^3.0.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "^4.0.0",
@@ -25,8 +27,10 @@
     "less": "^3.0.0",
     "less-loader": "^4.1.0",
     "mini-css-extract-plugin": "1.5.0",
+    "optimize-css-assets-webpack-plugin": "^6.0.1",
     "postcss-loader": "^4.0.1",
     "style-loader": "^2.0.0",
+    "uglifyjs-webpack-plugin": "^2.2.0",
     "url-loader": "^3.0.0",
     "vue": "^2.6.14",
     "vue-loader": "^15.9.8",
@@ -34,9 +38,11 @@
     "vue-template-compiler": "^2.6.14",
     "webpack": "^4.4.0",
     "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.10.3"
+    "webpack-dev-server": "^3.10.3",
+    "webpack-merge": "^5.9.0"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.12.1"
+    "@babel/polyfill": "^7.12.1",
+    "postcss": "^8.2.2"
   }
 }

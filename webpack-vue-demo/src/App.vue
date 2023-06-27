@@ -1,5 +1,5 @@
 <template>
-  <div>我是app22222</div>
+  <div class="app">我是app22222</div>
 </template>
 
 <script>
@@ -9,4 +9,7 @@ export default {
 </script>
 
 <style scoped>
+.app{
+  color: red;
+}
 </style>

@@ -5,6 +5,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const vueLoaderPlugin = require("vue-loader/lib/plugin");
 const Webpack = require("webpack");
 
+const devMode = process.argv.indexOf("--mode=production") === -1;
+
 module.exports = {
   mode: "development",
   /**
@@ -21,15 +23,25 @@ module.exports = {
     index: ["@babel/polyfill", resolve(__dirname, "./src/index.js")],
   },
   output: {
-    filename: "[name].[hash:10].js",
     path: resolve(__dirname, "dist"),
+    filename: "js/[name].[hash:10].js",
+    chunkFilename: "js/[name].[hash:10].js",
   },
   // loader
   module: {
     rules: [
       {
         test: /\.vue$/i,
-        use: ["vue-loader"],
+        use: [
+          {
+            loader: "vue-loader",
+            options: {
+              compilerOptions: {
+                preserveWhitespace: false,
+              },
+            },
+          },
+        ],
       },
       {
         test: /\.js$/,
@@ -64,14 +76,37 @@ module.exports = {
 
       {
         test: /\.css$/,
-        use: ["style-loader", MiniCssExtractPlugin.loader, "css-loader"],
+        use: [
+          {
+            loader: devMode ? "vue-style-loader" : MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: "./dist/css/",
+              // hmr: devMode,
+            },
+          },
+          "css-loader",
+          {
+            loader: "postcss-loader",
+            options: {
+              postcssOptions:{
+                plugins: [require("autoprefixer")],
+              }
+            },
+          },
+        ],
       },
       {
         test: /\.less$/, // 针对.less结尾的文件设置LOADER
         use: [
-          "style-loader",
-          MiniCssExtractPlugin.loader,
+          {
+            loader: devMode ? "vue-style-loader" : MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: "./dist/css/",
+              // hmr: devMode,
+            },
+          },
           "css-loader",
+          "less-loader",
           {
             loader: "postcss-loader", // 为css添加浏览器前缀
             options: {
@@ -80,7 +115,6 @@ module.exports = {
               },
             },
           },
-          "less-loader",
         ],
       },
     ],
@@ -99,8 +133,8 @@ module.exports = {
       chunks: ["index"], // 与入口文件对应的模块名
     }),
     new MiniCssExtractPlugin({
-      filename: "[name].[hash:10].css",
-      chunkFilename: "[id].css",
+      filename: devMode ? "css/[name].css" : "css/[name].[hash:10].css",
+      chunkFilename: devMode ? "css/[id].css" : "css/[id].[hash].css",
     }),
     new vueLoaderPlugin(),
     new Webpack.HotModuleReplacementPlugin(),
