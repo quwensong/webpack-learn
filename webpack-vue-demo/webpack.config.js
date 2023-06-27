@@ -4,11 +4,14 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const vueLoaderPlugin = require("vue-loader/lib/plugin");
 const Webpack = require("webpack");
+// 多线程打包
+const HappyPack = require("happypack");
+const os = require("os");
+const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 
 const devMode = process.argv.indexOf("--mode=production") === -1;
 
 module.exports = {
-  mode: "development",
   /**
    * output的publicPath是用来给生成的静态资源路径添加前缀的；
     devServer中的publicPath是用来本地服务拦截带publicPath开头的请求的；
@@ -42,6 +45,8 @@ module.exports = {
             },
           },
         ],
+        include: [resolve(__dirname, "./src/")],
+        exclude: /node_modules/,
       },
       {
         test: /\.js$/,
@@ -52,6 +57,9 @@ module.exports = {
               // 支持vue中的jsx语法 "@vue/babel-preset-jsx"
               presets: ["@babel/preset-env", "@vue/babel-preset-jsx"],
             },
+          },
+          {
+            loader: "happyPack/loader?id=happyBabel",
           },
         ],
         exclude: /node_modules/,
@@ -72,13 +80,16 @@ module.exports = {
             },
           },
         ],
+        include: [resolve(__dirname, "./src/assets/")],
+        exclude: /node_modules/,
       },
 
       {
         test: /\.css$/,
         use: [
           {
-            loader: devMode ? "vue-style-loader" : MiniCssExtractPlugin.loader,
+            // loader: devMode ? "vue-style-loader" : MiniCssExtractPlugin.loader,
+            loader: MiniCssExtractPlugin.loader,
             options: {
               publicPath: "./dist/css/",
               // hmr: devMode,
@@ -88,9 +99,9 @@ module.exports = {
           {
             loader: "postcss-loader",
             options: {
-              postcssOptions:{
+              postcssOptions: {
                 plugins: [require("autoprefixer")],
-              }
+              },
             },
           },
         ],
@@ -99,7 +110,8 @@ module.exports = {
         test: /\.less$/, // 针对.less结尾的文件设置LOADER
         use: [
           {
-            loader: devMode ? "vue-style-loader" : MiniCssExtractPlugin.loader,
+            // loader: devMode ? "vue-style-loader" : MiniCssExtractPlugin.loader,
+            loader: MiniCssExtractPlugin.loader,
             options: {
               publicPath: "./dist/css/",
               // hmr: devMode,
@@ -122,6 +134,7 @@ module.exports = {
   resolve: {
     alias: {
       "@": resolve(__dirname, "./src"),
+      assets: resolve(__dirname, "./src/assets"),
     },
     extensions: ["*", ".js", ".json", ".vue"],
   },
@@ -138,5 +151,19 @@ module.exports = {
     }),
     new vueLoaderPlugin(),
     new Webpack.HotModuleReplacementPlugin(),
+    new HappyPack({
+      id: "happyBabel",
+      // 用法和loader的配置一样，注意这里是loaders
+      loaders: [
+        {
+          loader: "babel-loader",
+          options: {
+            presets: [["@babel/preset-env"]],
+            cacheDirectory: true,
+          },
+        },
+      ],
+      threadPool: happyThreadPool, //共享进程池
+    }),
   ],
 };
