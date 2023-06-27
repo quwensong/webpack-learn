@@ -7,8 +7,13 @@ const Webpack = require("webpack");
 
 module.exports = {
   mode: "development",
+  /**
+   * output的publicPath是用来给生成的静态资源路径添加前缀的；
+    devServer中的publicPath是用来本地服务拦截带publicPath开头的请求的；
+    contentBase是用来指定被访问html页面所在目录的；
+  */
   devServer: {
-    port: 3000,
+    port: 8081,
     hot: true,
     contentBase: "./dist",
   },
@@ -32,7 +37,8 @@ module.exports = {
           {
             loader: "babel-loader",
             options: {
-              presets: ["@babel/preset-env"],
+              // 支持vue中的jsx语法 "@vue/babel-preset-jsx"
+              presets: ["@babel/preset-env", "@vue/babel-preset-jsx"],
             },
           },
         ],

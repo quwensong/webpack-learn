@@ -6,7 +6,7 @@
   "scripts": {
     "build:demo": "webpack --config webpack-demo/webpack.config.js",
     "build:vue-demo": "webpack --config webpack-vue-demo/webpack.config.js",
-    "server:vue-demo": "webpack-dev-server --config webpack-vue-demo/webpack.config.js --open"
+    "dev:vue-demo": "webpack-dev-server --config webpack-vue-demo/webpack.config.js --open"
   },
   "keywords": [],
   "author": "",
