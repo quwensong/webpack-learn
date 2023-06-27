@@ -44,7 +44,57 @@ module.exports = {
           },
         ],
       },
-
+      {
+        test: /\.(jpe?g|png|gif)$/i, //图片文件
+        use: [
+          {
+            loader: "url-loader",
+            options: {
+              limit: 25 * 1024, //25 kb以下的图片会被转换成base64
+              fallback: {
+                loader: "file-loader",
+                options: {
+                  name: "image/[name].[hash:8].[ext]",
+                },
+              },
+            },
+          },
+        ],
+      },
+      {
+        test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/, //媒体文件
+        use: [
+          {
+            loader: "url-loader",
+            options: {
+              limit: 10 * 1024,
+              fallback: {
+                loader: "file-loader",
+                options: {
+                  name: "media/[name].[hash:8].[ext]",
+                },
+              },
+            },
+          },
+        ],
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/i, // 字体
+        use: [
+          {
+            loader: "url-loader",
+            options: {
+              limit: 10 * 1024,
+              fallback: {
+                loader: "file-loader",
+                options: {
+                  name: "fonts/[name].[hash:8].[ext]",
+                },
+              },
+            },
+          },
+        ],
+      },
       {
         test: /\.css$/,
         use: ["style-loader", MiniCssExtractPlugin.loader, "css-loader"],
@@ -81,7 +131,7 @@ module.exports = {
     //   chunks: ["main"], // 与入口文件对应的模块名
     // }),
     new MiniCssExtractPlugin({
-      filename: "[name].[hash].css",
+      filename: "[name].[hash:10].css",
       chunkFilename: "[id].css",
     }),
   ],

@@ -1,9 +1,8 @@
-body {
-    /* background-color: blue; */
-}
+
 body {
   color: red;
   -webkit-animation: fadeIn 1 s;
           animation: fadeIn 1 s;
+  background-image: url(image/cat2.92878c7d.png);
 }
 
