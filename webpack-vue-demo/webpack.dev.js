@@ -11,5 +11,8 @@ module.exports = WebpackMerge.merge(webpackConfig, {
     hot: true,
     contentBase: "./dist",
   },
-  plugins: [new Webpack.HotModuleReplacementPlugin()],
+  plugins: [
+    new Webpack.HotModuleReplacementPlugin(),
+
+  ],
 });

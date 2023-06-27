@@ -7,6 +7,7 @@ const WebpackMerge = require("webpack-merge");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 
 module.exports = WebpackMerge.merge(webpackConfig, {
@@ -19,6 +20,10 @@ module.exports = WebpackMerge.merge(webpackConfig, {
         to: path.resolve(__dirname, "./dist"),
       },
     ]),
+    new BundleAnalyzerPlugin({
+      analyzerHost: "127.0.0.1",
+      analyzerPort: 8889,
+    }),
   ],
   optimization: {
     minimizer: [
