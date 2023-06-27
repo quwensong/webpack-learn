@@ -1,0 +1,9 @@
+body {
+    /* background-color: blue; */
+}
+body {
+  color: red;
+  -webkit-animation: fadeIn 1 s;
+          animation: fadeIn 1 s;
+}
+
