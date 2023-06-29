@@ -21,19 +21,15 @@ const devMode = process.argv.indexOf("--mode=production") === -1;
 module.exports = {
   /**
    * output的publicPath是用来给生成的静态资源路径添加前缀的；
-    devServer中的publicPath是用来本地服务拦截带publicPath开头的请求的；
-    contentBase是用来指定被访问html页面所在目录的；
+    devServer中的publicPath而publicPath用于指定打包后的文件在浏览器中的访问路径。；
+    contentBasecontentBase用于指定服务器的根目录，即静态文件的根目录路径；但是，有时候我们需要在开发过程中访问一些静态文件，比如图片、字体文件等。这时，我们可以使用contentBase选项来指定这些静态文件的路径。
   */
-  devServer: {
-    port: 8081,
-    hot: true,
-    contentBase: "./dist",
-  },
   entry: {
     index: ["@babel/polyfill", resolve(__dirname, "./src/index.js")],
   },
   output: {
     path: resolve(__dirname, "dist"),
+    // publicPath: "/",
     filename: "js/[name].[hash:10].js",
     chunkFilename: "js/[name].[hash:10].js",
   },

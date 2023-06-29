@@ -9,7 +9,7 @@ module.exports = WebpackMerge.merge(webpackConfig, {
   devServer: {
     port: 8080,
     hot: true,
-    contentBase: "./dist",
+    contentBase: "./public",
   },
   plugins: [
     new Webpack.HotModuleReplacementPlugin(),
