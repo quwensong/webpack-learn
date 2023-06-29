@@ -159,7 +159,7 @@ module.exports = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: resolve(__dirname, "./public/index.html"),
-      filename: "html/index.html", // 打包后的文件名  输出文件的文件名称，默认为index.html，不配置就是该文件名；此外，还可以为输出文件指定目录位置（例如'html/index.html'）
+      filename: "index.html", // 打包后的文件名  输出文件的文件名称，默认为根目录下index.html，不配置就是该文件名；此外，还可以为输出文件指定目录位置（例如'html/index.html'）
       chunks: ["index"], // 与入口文件对应的模块名
     }),
     new MiniCssExtractPlugin({
