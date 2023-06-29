@@ -10,9 +10,7 @@ module.exports = WebpackMerge.merge(webpackConfig, {
     port: 8080,
     hot: true,
     contentBase: "./public",
+    // publicPath: "/html",  //需要这样子访问 http://localhost:8080/html
+    // publicPath: "/",  //需要这样子访问 http://localhost:8080
   },
-  plugins: [
-    new Webpack.HotModuleReplacementPlugin(),
-
-  ],
 });
